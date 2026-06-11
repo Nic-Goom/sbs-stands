@@ -141,8 +141,8 @@ function buildStand(scene) {
   dimSprite.position.set(0, 0.34, 1.62);
   dimSprite.renderOrder = 99;
   dim.add(dimSprite);
+  dim.visible = false;
   scene.add(dim);
-  refs.dimGroup = dim;
 
   // expose setter: kind = 'off' | 'white' | 'purple' → returns clear-opening metres
   refs.setCurtain = function (kind) {
@@ -224,8 +224,8 @@ function buildStand(scene) {
   screen.material.emissive = new THREE.Color(0xffffff);
   screen.material.emissiveMap = screen.material.map;
   screen.material.emissiveIntensity = 0.6;
-  kiosk.position.set(0.62, 0, 0.42);
-  kiosk.rotation.y = -0.55;          // angled toward visitors coming in
+  kiosk.position.set(1.12, 0, -0.9);
+  kiosk.rotation.y = 0;
   scene.add(kiosk);
   refs.kiosk = kiosk;
 
@@ -271,8 +271,8 @@ function buildStand(scene) {
     box(0.88, 0.06, 0.1, mat.darkGrey, 0, 0.03, 0, 0, g);
     plane(0.85, 1.95, rt, 0, 1.02, 0.02, 0, g);
     box(0.86, 0.03, 0.03, mat.darkGrey, 0, 2.0, 0.02, 0, g);
-    g.position.set(-1.32, 0, rz);
-    g.rotation.y = Math.PI / 2 - 0.14;
+    g.position.set(-1.44, 0, rz);
+    g.rotation.y = Math.PI / 2;
     scene.add(g);
   });
 
@@ -357,7 +357,7 @@ function buildStand(scene) {
   }
   label(1, 0, 2.62, 1.52);                     // hoisted front banner
   label(2, -1.05, 2.12, 0.12, refs.displayGroup); // media wall (moves with it)
-  label(3, 0.62, 1.95, 0.42);                   // screen on cloth table
+  label(3, 1.12, 1.95, -0.9);                   // screen on cloth table
   label(4, -1.25, 2.15, 0.75);                 // two banners (forward)
   label(5, 0.95, 1.5, 0.85);                   // desk
   label(6, 1.18, 1.78, 1.95);                  // leaflet column (out front)

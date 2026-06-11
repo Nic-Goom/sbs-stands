@@ -298,66 +298,48 @@ const StandTextures = (() => {
     // White background
     x.fillStyle = '#ffffff'; x.fillRect(0, 0, 2000, 1250);
 
-    // Lime top bar + purple bottom bar (frame the wall)
-    x.fillStyle = BRAND.lime;   x.fillRect(0, 0, 2000, 72);
-    x.fillStyle = BRAND.purple; x.fillRect(0, 1178, 2000, 72);
+    // RIGHT 60%: heroes photo fills full height
+    const split = 800;
+    x.save();
+    x.beginPath(); x.rect(split, 0, 2000 - split, 1250); x.clip();
+    const pw = 2000 - split;
+    const sc = Math.max(pw / IMG.heroes.width, 1250 / IMG.heroes.height);
+    const dw = IMG.heroes.width * sc, dh = IMG.heroes.height * sc;
+    x.drawImage(IMG.heroes, split + (pw - dw) / 2, (1250 - dh) / 2, dw, dh);
+    x.restore();
+    // soft feather where left panel meets photo
+    const fade = x.createLinearGradient(split, 0, split + 120, 0);
+    fade.addColorStop(0, '#ffffff'); fade.addColorStop(1, 'rgba(255,255,255,0)');
+    x.fillStyle = fade; x.fillRect(split, 0, 120, 1250);
 
-    // Subtle brand splashes (low opacity so white bg stays clean)
-    x.globalAlpha = 0.18;
-    x.drawImage(IMG.splashPink,   -180, -120, 620, 620);
-    x.drawImage(IMG.splashLime,   1560,  820, 520, 520);
-    x.drawImage(IMG.dotsYellow,   1680,  -60, 360, 360);
-    x.globalAlpha = 1;
+    // Lime accent bars top + bottom
+    x.fillStyle = BRAND.lime; x.fillRect(0, 0, 2000, 16);
+    x.fillStyle = BRAND.lime; x.fillRect(0, 1234, 2000, 16);
 
-    // ---- LEFT: text column (x: 60–1060) ----
-    // Staircase brand mark
-    staircase(x, 72, 110, 180, 160, BRAND.lime, BRAND.yellow);
+    // LEFT: text panel (0–800 px)
+    staircase(x, 60, 90, 150, 120, BRAND.lime, BRAND.yellow);
 
-    // Main headline
-    veneer(x, 'OPEN YOUR HOME', 560, 250, 128, BRAND.purple);
-    veneer(x, 'TO A', 300, 390, 128, BRAND.pink);
+    veneer(x, 'OPEN YOUR HOME', 445, 248, 116, BRAND.purple);
+    veneer(x, 'TO A', 225, 370, 116, BRAND.pink);
+    x.fillStyle = BRAND.yellow; x.fillRect(50, 415, 840, 100);
+    veneer(x, 'YOUNG PERSON', 480, 468, 108, BRAND.purple);
 
-    // Yellow highlight band behind "YOUNG PERSON"
-    x.fillStyle = BRAND.yellow; x.fillRect(60, 440, 980, 110);
-    veneer(x, 'YOUNG PERSON', 560, 500, 124, BRAND.purple);
-
-    // Service tags
-    const tags = ['SUPPORTED LODGINGS', 'FOSTERING'];
-    tags.forEach((t, i) => {
-      const ty = 600 + i * 76;
-      x.fillStyle = BRAND.purple;
-      roundRect(x, 60, ty, t === 'FOSTERING' ? 340 : 540, 58, 29); x.fill();
-      body(x, t, 60 + (t === 'FOSTERING' ? 170 : 270), ty + 32, 28, BRAND.white, 'center', true);
+    [['SUPPORTED LODGINGS', 510], ['FOSTERING', 290]].forEach(([t, w], i) => {
+      const ty = 578 + i * 72;
+      x.fillStyle = BRAND.purple; roundRect(x, 50, ty, w, 52, 26); x.fill();
+      body(x, t, 50 + w / 2, ty + 29, 26, BRAND.white, 'center', true);
     });
 
-    // Pink stroke + body copy
-    x.drawImage(IMG.strokePink, 60, 780, 960, 110);
-    body(x, 'Could you open your home and make', 540, 852, 36, BRAND.purple, 'center', true);
-    body(x, "a real difference in a young person's life?", 540, 896, 36, BRAND.purple, 'center', true);
+    body(x, 'Could you open your home and make a real', 440, 790, 30, BRAND.purple, 'center', true);
+    body(x, "difference in a young person's life?", 440, 828, 30, BRAND.purple, 'center', true);
 
-    // Purple CTA box
-    x.fillStyle = BRAND.purple;
-    roundRect(x, 60, 970, 960, 88, 12); x.fill();
-    body(x, "IF YOU'RE INTERESTED — SPEAK TO US TODAY", 540, 1016, 30, BRAND.white, 'center', true);
+    x.fillStyle = BRAND.purple; roundRect(x, 50, 892, 830, 72, 12); x.fill();
+    body(x, "INTERESTED? COME AND TALK TO US TODAY", 465, 930, 26, BRAND.white, 'center', true);
 
-    // Logo + website
-    x.drawImage(IMG.logoWideWhite, 60, 1090, 480, 480 * (IMG.logoWideWhite.height / IMG.logoWideWhite.width));
-    body(x, 'stepbystep.org.uk  //  01252 346100', 540, 1150, 30, BRAND.purple, 'center', true);
-
-    // ---- RIGHT: photo panel (x: 1100–1980) ----
-    const px = 1100, pw = 880, ph = 1100, py = 75;
-    // Warm cream photo backing
-    x.fillStyle = '#f0ebe0'; x.fillRect(px, py, pw, ph);
-    // Lime accent strip on left edge of photo
-    x.fillStyle = BRAND.lime; x.fillRect(px, py, 14, ph);
-    // Draw heroes photo filling the right panel
-    const scale = pw / IMG.heroes.width;
-    const ih = IMG.heroes.height * scale;
-    x.drawImage(IMG.heroes, px + 14, py + ph - ih, pw - 14, ih);
-    // Caption strip at the bottom of the photo
-    x.fillStyle = 'rgba(65,37,118,0.82)';
-    x.fillRect(px, py + ph - 80, pw, 80);
-    body(x, 'Real hosts. Real homes. Real difference.', px + pw / 2, py + ph - 38, 34, BRAND.white, 'center', true);
+    // Footer band with logo
+    x.fillStyle = BRAND.purple; x.fillRect(0, 1038, split, 212);
+    x.drawImage(IMG.logoWideWhite, 52, 1058, 360, 360 * (IMG.logoWideWhite.height / IMG.logoWideWhite.width));
+    body(x, 'stepbystep.org.uk  //  01252 346100', 440, 1200, 24, BRAND.white, 'center', true);
 
     return tex(c);
   }
