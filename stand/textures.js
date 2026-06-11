@@ -29,7 +29,8 @@ const StandTextures = (() => {
     logoWideWhite: 'assets/logo-secondary-white.png',
     bthLogo: 'assets/bth-logo.png',
     heroes: 'assets/heroes.png',
-    cooking: 'assets/cooking.png'
+    cooking: 'assets/cooking.png',
+    mediaWall: 'assets/mediawall.png'
   };
 
   function loadImage(src) {
@@ -41,7 +42,7 @@ const StandTextures = (() => {
     });
   }
 
-  const OPTIONAL_IMGS = new Set(['cooking']);
+  const OPTIONAL_IMGS = new Set(['cooking', 'mediaWall']);
 
   async function load() {
     const font = new FontFace('Veneer', "url('fonts/Veneer.otf')");
@@ -302,6 +303,15 @@ const StandTextures = (() => {
   function makeMediaWall() {
     const [c, x] = cv(2000, 1250);
 
+    // If the full poster image has been uploaded, use it directly (scale to fill)
+    if (IMG.mediaWall) {
+      const sc = Math.max(2000 / IMG.mediaWall.width, 1250 / IMG.mediaWall.height);
+      const dw = IMG.mediaWall.width * sc, dh = IMG.mediaWall.height * sc;
+      x.drawImage(IMG.mediaWall, (2000 - dw) / 2, (1250 - dh) / 2, dw, dh);
+      return tex(c);
+    }
+
+    // Fallback: recreate the brand design from scratch
     // Hot pink / magenta base (matches the reference poster)
     x.fillStyle = BRAND.pink; x.fillRect(0, 0, 2000, 1250);
 
