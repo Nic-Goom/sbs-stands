@@ -292,25 +292,73 @@ const StandTextures = (() => {
     return out;
   }
 
-  /* ---------- Tension-fabric media wall (printed back wall) ---------- */
+  /* ---------- Tension-fabric media wall — "Open Your Home" fostering design ---------- */
   function makeMediaWall() {
     const [c, x] = cv(2000, 1250);
-    x.fillStyle = BRAND.purple; x.fillRect(0, 0, 2000, 1250);
-    x.globalAlpha = 0.92;
-    x.drawImage(IMG.splashPink, -260, -260, 980, 980);
-    x.drawImage(IMG.splashLime, 1500, 720, 760, 760);
-    x.drawImage(IMG.dotsYellow, 1620, -120, 480, 480);
-    x.drawImage(IMG.dotsPurple, 80, 880, 440, 440);
+    // White background
+    x.fillStyle = '#ffffff'; x.fillRect(0, 0, 2000, 1250);
+
+    // Lime top bar + purple bottom bar (frame the wall)
+    x.fillStyle = BRAND.lime;   x.fillRect(0, 0, 2000, 72);
+    x.fillStyle = BRAND.purple; x.fillRect(0, 1178, 2000, 72);
+
+    // Subtle brand splashes (low opacity so white bg stays clean)
+    x.globalAlpha = 0.18;
+    x.drawImage(IMG.splashPink,   -180, -120, 620, 620);
+    x.drawImage(IMG.splashLime,   1560,  820, 520, 520);
+    x.drawImage(IMG.dotsYellow,   1680,  -60, 360, 360);
     x.globalAlpha = 1;
-    x.drawImage(IMG.bthLogo, 90, 70, 520, 520 * (IMG.bthLogo.height / IMG.bthLogo.width));
-    x.drawImage(IMG.strokeWhite, 70, 430, 1180, 220);
-    veneer(x, 'TAKE A STAND AGAINST', 660, 525, 104, BRAND.purple);
-    veneer(x, 'YOUTH HOMELESSNESS', 660, 690, 132, BRAND.white);
-    veneer(x, 'IN THE NEW FOREST', 660, 830, 104, BRAND.yellow);
-    const hw = 560, hh = hw * (IMG.heroes.height / IMG.heroes.width);
-    x.drawImage(IMG.heroes, 80, 1190 - hh, hw, hh);
-    body(x, '1,481 young people supported last year', 1300, 1010, 44, BRAND.white, 'center', true);
-    x.drawImage(IMG.logoWideWhite, 980, 1050, 640, 640 * (IMG.logoWideWhite.height / IMG.logoWideWhite.width));
+
+    // ---- LEFT: text column (x: 60–1060) ----
+    // Staircase brand mark
+    staircase(x, 72, 110, 180, 160, BRAND.lime, BRAND.yellow);
+
+    // Main headline
+    veneer(x, 'OPEN YOUR HOME', 560, 250, 128, BRAND.purple);
+    veneer(x, 'TO A', 300, 390, 128, BRAND.pink);
+
+    // Yellow highlight band behind "YOUNG PERSON"
+    x.fillStyle = BRAND.yellow; x.fillRect(60, 440, 980, 110);
+    veneer(x, 'YOUNG PERSON', 560, 500, 124, BRAND.purple);
+
+    // Service tags
+    const tags = ['SUPPORTED LODGINGS', 'FOSTERING'];
+    tags.forEach((t, i) => {
+      const ty = 600 + i * 76;
+      x.fillStyle = BRAND.purple;
+      roundRect(x, 60, ty, t === 'FOSTERING' ? 340 : 540, 58, 29); x.fill();
+      body(x, t, 60 + (t === 'FOSTERING' ? 170 : 270), ty + 32, 28, BRAND.white, 'center', true);
+    });
+
+    // Pink stroke + body copy
+    x.drawImage(IMG.strokePink, 60, 780, 960, 110);
+    body(x, 'Could you open your home and make', 540, 852, 36, BRAND.purple, 'center', true);
+    body(x, "a real difference in a young person's life?", 540, 896, 36, BRAND.purple, 'center', true);
+
+    // Purple CTA box
+    x.fillStyle = BRAND.purple;
+    roundRect(x, 60, 970, 960, 88, 12); x.fill();
+    body(x, "IF YOU'RE INTERESTED — SPEAK TO US TODAY", 540, 1016, 30, BRAND.white, 'center', true);
+
+    // Logo + website
+    x.drawImage(IMG.logoWideWhite, 60, 1090, 480, 480 * (IMG.logoWideWhite.height / IMG.logoWideWhite.width));
+    body(x, 'stepbystep.org.uk  //  01252 346100', 540, 1150, 30, BRAND.purple, 'center', true);
+
+    // ---- RIGHT: photo panel (x: 1100–1980) ----
+    const px = 1100, pw = 880, ph = 1100, py = 75;
+    // Warm cream photo backing
+    x.fillStyle = '#f0ebe0'; x.fillRect(px, py, pw, ph);
+    // Lime accent strip on left edge of photo
+    x.fillStyle = BRAND.lime; x.fillRect(px, py, 14, ph);
+    // Draw heroes photo filling the right panel
+    const scale = pw / IMG.heroes.width;
+    const ih = IMG.heroes.height * scale;
+    x.drawImage(IMG.heroes, px + 14, py + ph - ih, pw - 14, ih);
+    // Caption strip at the bottom of the photo
+    x.fillStyle = 'rgba(65,37,118,0.82)';
+    x.fillRect(px, py + ph - 80, pw, 80);
+    body(x, 'Real hosts. Real homes. Real difference.', px + pw / 2, py + ph - 38, 34, BRAND.white, 'center', true);
+
     return tex(c);
   }
 
