@@ -32,7 +32,8 @@ const StandTextures = (() => {
     cooking: 'assets/cooking.png',
     mediaWall: 'assets/mediawall.png',
     banner1: 'assets/banner1.png',
-    banner2: 'assets/banner2.png'
+    banner2: 'assets/banner2.png',
+    rockley: 'assets/rockley.png'
   };
 
   function loadImage(src) {
@@ -44,7 +45,7 @@ const StandTextures = (() => {
     });
   }
 
-  const OPTIONAL_IMGS = new Set(['cooking', 'mediaWall', 'banner1', 'banner2']);
+  const OPTIONAL_IMGS = new Set(['cooking', 'mediaWall', 'banner1', 'banner2', 'rockley']);
 
   async function load() {
     const font = new FontFace('Veneer', "url('fonts/Veneer.otf')");
@@ -398,24 +399,38 @@ const StandTextures = (() => {
     const [c, x] = cv(800, 1100);
     // purple background
     x.fillStyle = BRAND.purple; x.fillRect(0, 0, 800, 1100);
-    x.globalAlpha = 0.18; x.drawImage(IMG.dotsPurple, 440, 700, 400, 400); x.globalAlpha = 1;
-    // lime splash top-left
-    x.drawImage(IMG.splashLime, -80, -80, 380, 380);
-    // FREE GAME headline
-    veneer(x, 'FREE', 400, 190, 190, BRAND.lime);
-    veneer(x, 'GAME!', 400, 360, 190, BRAND.pink);
-    // pink stroke divider
-    x.drawImage(IMG.strokePink, 60, 430, 680, 120);
-    veneer(x, 'PLAY OUR STEP UP CHALLENGE', 400, 494, 48, BRAND.white);
-    // competition box
-    x.fillStyle = BRAND.lime;
-    roundRect(x, 60, 560, 680, 280, 18); x.fill();
-    veneer(x, 'WIN!', 400, 630, 100, BRAND.purple);
-    body(x, 'A FREE family stay at', 400, 700, 34, BRAND.purple, 'center', true);
-    veneer(x, 'ROCKLEY PARK', 400, 770, 68, BRAND.pink);
-    body(x, 'Poole, Dorset', 400, 820, 30, BRAND.purple, 'center', true);
+    x.globalAlpha = 0.15; x.drawImage(IMG.dotsPurple, 420, 680, 420, 420); x.globalAlpha = 1;
+    // pink splash top-RIGHT so it doesn't touch the F
+    x.drawImage(IMG.splashPink, 520, -100, 360, 360);
+
+    // --- TOP SECTION: FREE GAME ---
+    veneer(x, 'FREE', 400, 180, 190, BRAND.lime);
+    veneer(x, 'GAME!', 400, 345, 190, BRAND.pink);
+    body(x, 'Play our Step Up Challenge', 400, 420, 32, BRAND.white, 'center', true);
+
+    // divider stroke
+    x.drawImage(IMG.strokeWhite, 60, 450, 680, 90);
+
+    // --- BOTTOM SECTION: competition (independent of the game) ---
+    veneer(x, 'COMPETITION', 400, 555, 72, BRAND.lime);
+    veneer(x, 'WIN!', 400, 640, 100, BRAND.yellow);
+    body(x, 'A FREE family holiday', 400, 692, 32, BRAND.white, 'center', true);
+    veneer(x, 'ROCKLEY PARK', 400, 755, 62, BRAND.pink);
+    body(x, 'Poole, Dorset  •  See us for details', 400, 797, 26, BRAND.white, 'center', true);
+
+    // Rockley Park photo (optional — clipped to rounded rect)
+    if (IMG.rockley) {
+      const iw = 560, ih = 160, ix = 120, iy = 820;
+      x.save();
+      roundRect(x, ix, iy, iw, ih, 12); x.clip();
+      const sc = Math.max(iw / IMG.rockley.width, ih / IMG.rockley.height);
+      const dw = IMG.rockley.width * sc, dh = IMG.rockley.height * sc;
+      x.drawImage(IMG.rockley, ix + (iw - dw) / 2, iy + (ih - dh) / 2, dw, dh);
+      x.restore();
+    }
+
     // logo
-    x.drawImage(IMG.logoWhite, 310, 890, 180, 170);
+    x.drawImage(IMG.logoWhite, 310, 990, 180, 90);
     return tex(c);
   }
 
