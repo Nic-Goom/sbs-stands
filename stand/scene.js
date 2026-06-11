@@ -171,13 +171,12 @@ function buildStand(scene) {
   /* ---------- 1. tall timber frame: main banner hoisted above the bunting ---------- */
   // free-standing goalpost frame at the front — nothing fixed to the tent, no barrier across the opening
   const frame = new THREE.Group();
-  [-1.46, 1.46].forEach(px => {
-    box(0.07, 2.66, 0.07, mat.wood, px, 1.33, 0, 0, frame);            // tall upright
-    box(0.07, 0.05, 0.55, mat.wood, px, 0.027, 0, 0, frame);           // foot
+  [-1.6, 1.6].forEach(px => {
+    box(0.07, 2.66, 0.07, mat.wood, px, 1.33, 0, 0, frame);            // upright — attaches to corner pole
   });
-  box(3.06, 0.07, 0.07, mat.wood, 0, 2.64, 0, 0, frame);              // top crossbar
-  plane(2.92, 0.62, StandTextures.makeFrontBanner(), 0, 2.34, -0.055, 0, frame); // banner hung BEHIND the crossbar
-  frame.position.set(0, 0, 1.66);   // sign sits IN FRONT of the gazebo front (fascia behind it)
+  box(3.26, 0.07, 0.07, mat.wood, 0, 2.64, 0, 0, frame);              // top crossbar (full width)
+  plane(3.14, 0.62, StandTextures.makeFrontBanner(), 0, 2.34, -0.055, 0, frame); // banner
+  frame.position.set(0, 0, 1.52);   // flush with the corner poles
   scene.add(frame);
 
   /* ---------- 2. tension-fabric media wall (printed) + LED spotlights ---------- */
@@ -271,7 +270,7 @@ function buildStand(scene) {
   // keep "Behind every hero is someone who cares" (0) + "Be the hero of your own story" (2)
   // both sit forward of the tension-fabric wall, with a small gap between them
   const rollTex = StandTextures.makeRollups();
-  [[rollTex[0], -0.07], [rollTex[2], -0.96]].forEach(([rt, rz], i) => {
+  [[rollTex[0], 1.0], [rollTex[2], 0.1]].forEach(([rt, rz], i) => {
     const g = new THREE.Group();
     box(0.88, 0.06, 0.1, mat.darkGrey, 0, 0.03, 0, 0, g);
     plane(0.85, 1.95, rt, 0, 1.02, 0.02, 0, g);
@@ -363,7 +362,7 @@ function buildStand(scene) {
   label(1, 0, 2.62, 1.52);                     // hoisted front banner
   label(2, -1.05, 2.12, 0.12, refs.displayGroup); // media wall (moves with it)
   label(3, 0.62, 1.95, 0.42);                   // screen on cloth table
-  label(4, -1.25, 2.15, -0.52);                // two banners (against back wall)
+  label(4, -1.25, 2.15, 0.55);                 // two banners
   label(5, 1.2, 1.5, 1.2);                     // desk
   label(6, 1.18, 1.78, 1.95);                  // leaflet column (out front)
   label(7, -0.85, 1.0, 2.35);                  // game (out front)
