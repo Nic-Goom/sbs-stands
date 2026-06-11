@@ -33,7 +33,7 @@ const StandTextures = (() => {
     mediaWall: 'assets/mediawall.png',
     banner1: 'assets/banner1.png',
     banner2: 'assets/banner2.png',
-    rockley: 'assets/rockley.png'
+    rockley: 'assets/rockley.jpg'
   };
 
   function loadImage(src) {
