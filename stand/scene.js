@@ -93,13 +93,21 @@ function buildStand(scene) {
   // The marquee's cream tie-back curtains can't be removed; they gather at each
   // front corner. We can hang a brand drape (white or purple) in front to hide them.
   // Opening between corner posts ≈ 3.00 m (x: -1.50 … +1.50).
-  function pleatedCurtain(w, h, folds, depth, texture, x, y, z, parent) {
-    const segs = Math.max(10, folds * 6);
-    const geo = new THREE.PlaneGeometry(w, h, segs, 1);
+  function pleatedCurtain(w, h, folds, depth, texture, x, y, z, parent, tieback = false) {
+    const segsX = Math.max(10, folds * 6);
+    const segsY = tieback ? 28 : 1;
+    const geo = new THREE.PlaneGeometry(w, h, segsX, segsY);
     const pos = geo.attributes.position;
     for (let i = 0; i < pos.count; i++) {
       const px = pos.getX(i);
+      const py = pos.getY(i);
       pos.setZ(i, Math.sin((px / w + 0.5) * Math.PI * 2 * folds) * depth);
+      if (tieback) {
+        // pinch x toward 0 at the tie point (mid-height), fan out at top and bottom
+        const t = (py + h / 2) / h;   // 0 = bottom, 1 = top
+        const squeeze = 0.72 * Math.exp(-14 * Math.pow(t - 0.5, 2));
+        pos.setX(i, px * (1 - squeeze));
+      }
     }
     geo.computeVertexNormals();
     const m = new THREE.MeshStandardMaterial({ map: texture, side: THREE.DoubleSide, roughness: 0.93 });
@@ -113,7 +121,7 @@ function buildStand(scene) {
   const creamTex = StandTextures.makeCurtainFabric('cream');
   [-1, 1].forEach(side => {
     const cx = side * 1.35;                       // centre 0.15 m in from the post → inner edge ∓1.20
-    pleatedCurtain(0.30, 1.98, 4, 0.05, creamTex, cx, 1.03, 1.42, scene);
+    pleatedCurtain(0.30, 1.98, 4, 0.05, creamTex, cx, 1.03, 1.42, scene, true);
     // tie-band pinching it at mid height
     box(0.34, 0.05, 0.12, mat.darkGrey, cx, 1.0, 1.45, 0, scene, false);
   });
@@ -124,7 +132,7 @@ function buildStand(scene) {
   const coverMeshes = [];
   [-1, 1].forEach(side => {
     const cx = side * 1.275;                      // inner edge ∓1.05
-    const d = pleatedCurtain(0.45, 2.02, 5, 0.05, coverTex.purple, cx, 1.04, 1.47, coverGroup);
+    const d = pleatedCurtain(0.45, 2.02, 5, 0.05, coverTex.purple, cx, 1.04, 1.47, coverGroup, true);
     coverMeshes.push(d);
     // curtain pole header
     box(0.49, 0.05, 0.06, mat.darkGrey, cx, 2.05, 1.47, 0, coverGroup, false);
@@ -224,8 +232,8 @@ function buildStand(scene) {
   screen.material.emissive = new THREE.Color(0xffffff);
   screen.material.emissiveMap = screen.material.map;
   screen.material.emissiveIntensity = 0.6;
-  kiosk.position.set(1.12, 0, -0.9);
-  kiosk.rotation.y = 0;
+  kiosk.position.set(0.62, 0, 0.42);
+  kiosk.rotation.y = -0.55;
   scene.add(kiosk);
   refs.kiosk = kiosk;
 
@@ -294,8 +302,8 @@ function buildStand(scene) {
   // leaflets on top
   box(0.15, 0.012, 0.21, mat.pink, 0.14, 0.97, 0.04, 0.3, desk);
   box(0.15, 0.012, 0.21, mat.purple, 0.18, 0.985, -0.06, 0.55, desk);
-  desk.position.set(0.95, 0, 0.85);
-  desk.rotation.y = -0.5;
+  desk.position.set(1.2, 0, 1.2);
+  desk.rotation.y = -0.2;
   scene.add(desk);
 
   /* ---------- 6. single-column leaflet stand, out front before the A-frame ---------- */
@@ -357,9 +365,9 @@ function buildStand(scene) {
   }
   label(1, 0, 2.62, 1.52);                     // hoisted front banner
   label(2, -1.05, 2.12, 0.12, refs.displayGroup); // media wall (moves with it)
-  label(3, 1.12, 1.95, -0.9);                   // screen on cloth table
+  label(3, 0.62, 1.95, 0.42);                   // screen on cloth table
   label(4, -1.25, 2.15, 0.75);                 // two banners (forward)
-  label(5, 0.95, 1.5, 0.85);                   // desk
+  label(5, 1.2, 1.5, 1.2);                     // desk
   label(6, 1.18, 1.78, 1.95);                  // leaflet column (out front)
   label(7, -0.85, 1.0, 2.35);                  // game (out front)
   label(8, 0.05, 0.95, -1.05);                 // staff area
