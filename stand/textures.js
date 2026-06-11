@@ -122,7 +122,7 @@ const StandTextures = (() => {
     x.drawImage(IMG.logoWhite, 130, 230, 280, 260);
     veneer(x, 'TAKE A STAND AGAINST', 1230, 215, 170, BRAND.purple);
     // pink stroke behind second line
-    x.drawImage(IMG.strokePink, 540, 290, 1400, 230);
+    x.drawImage(IMG.strokePink, 300, 290, 1640, 230);
     veneer(x, 'YOUTH HOMELESSNESS', 1230, 408, 180, BRAND.white);
     body(x, 'SUPPORTED LODGINGS  //  FOSTERING  //  COUNSELLING  //  YOUTH SUPPORT', 1230, 580, 40, BRAND.purple, 'center', true);
     body(x, 'stepbystep.org.uk', 1230, 665, 44, BRAND.pink, 'center', true);

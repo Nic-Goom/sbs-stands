@@ -174,9 +174,6 @@ function buildStand(scene) {
   [-1.46, 1.46].forEach(px => {
     box(0.07, 2.66, 0.07, mat.wood, px, 1.33, 0, 0, frame);            // tall upright
     box(0.07, 0.05, 0.55, mat.wood, px, 0.027, 0, 0, frame);           // foot
-    box(0.07, 0.05, 0.55, mat.wood, px, 0.027, 0, 0, frame);
-    const brace = box(0.05, 0.5, 0.05, mat.wood, px + (px < 0 ? 0.18 : -0.18), 0.5, 0.16, 0, frame); // angled stay
-    brace.rotation.x = 0.5;
   });
   box(3.06, 0.07, 0.07, mat.wood, 0, 2.64, 0, 0, frame);              // top crossbar
   plane(2.92, 0.62, StandTextures.makeFrontBanner(), 0, 2.34, -0.055, 0, frame); // banner hung BEHIND the crossbar
@@ -274,7 +271,7 @@ function buildStand(scene) {
   // keep "Behind every hero is someone who cares" (0) + "Be the hero of your own story" (2)
   // both sit forward of the tension-fabric wall, with a small gap between them
   const rollTex = StandTextures.makeRollups();
-  [[rollTex[0], 1.18], [rollTex[2], 0.32]].forEach(([rt, rz], i) => {
+  [[rollTex[0], -0.07], [rollTex[2], -0.96]].forEach(([rt, rz], i) => {
     const g = new THREE.Group();
     box(0.88, 0.06, 0.1, mat.darkGrey, 0, 0.03, 0, 0, g);
     plane(0.85, 1.95, rt, 0, 1.02, 0.02, 0, g);
@@ -327,8 +324,8 @@ function buildStand(scene) {
     box(0.8, 0.11 * (i + 1), 0.21, stepCols[i], 0, 0.055 * (i + 1), -0.21 * i, 0, game);
   }
   // sign on a post at the back of the steps
-  box(0.04, 1.15, 0.04, mat.wood, 0, 0.57, -0.75, 0, game);
-  plane(0.62, 0.32, StandTextures.makeGameSign(), 0, 1.05, -0.72, 0, game);
+  box(0.04, 1.15, 0.04, mat.wood, 0, 0.57, -0.95, 0, game);
+  plane(0.62, 0.32, StandTextures.makeGameSign(), 0, 1.05, -0.92, 0, game);
   // beanbags
   [[0.18, 0.13, 0.05, mat.pink], [-0.2, 0.24, -0.2, mat.purple], [0.05, 0.46, -0.62, mat.pink]].forEach(([bx, by, bz, bm]) => {
     const bag = new THREE.Mesh(new THREE.SphereGeometry(0.06, 14, 10), bm);
@@ -346,7 +343,7 @@ function buildStand(scene) {
   const aTex = StandTextures.makeAFrame();
   [-1, 1].forEach(side => {
     const board = plane(0.62, 0.86, aTex, 0, 0.5, side * 0.11, 0, aframe);
-    board.rotation.x = side * 0.16;
+    board.rotation.x = -side * 0.16;
   });
   box(0.64, 0.04, 0.06, mat.wood, 0, 0.92, 0, 0, aframe, false);
   aframe.position.set(1.98, 0, 2.78);
@@ -366,7 +363,7 @@ function buildStand(scene) {
   label(1, 0, 2.62, 1.52);                     // hoisted front banner
   label(2, -1.05, 2.12, 0.12, refs.displayGroup); // media wall (moves with it)
   label(3, 0.62, 1.95, 0.42);                   // screen on cloth table
-  label(4, -1.25, 2.15, 0.75);                 // two banners (forward)
+  label(4, -1.25, 2.15, -0.52);                // two banners (against back wall)
   label(5, 1.2, 1.5, 1.2);                     // desk
   label(6, 1.18, 1.78, 1.95);                  // leaflet column (out front)
   label(7, -0.85, 1.0, 2.35);                  // game (out front)
