@@ -169,11 +169,11 @@ function buildStand(scene) {
   /* ---------- 1. tall timber frame: main banner hoisted above the bunting ---------- */
   // free-standing goalpost frame at the front — nothing fixed to the tent, no barrier across the opening
   const frame = new THREE.Group();
-  [-1.6, 1.6].forEach(px => {
-    box(0.07, 2.66, 0.07, mat.wood, px, 1.33, 0, 0, frame);            // upright — attaches to corner pole
+  [-1.45, 1.45].forEach(px => {
+    box(0.07, 2.66, 0.07, mat.wood, px, 1.33, 0, 0, frame);            // upright
   });
-  box(3.26, 0.07, 0.07, mat.wood, 0, 2.64, 0, 0, frame);              // top crossbar (full width)
-  plane(3.14, 0.62, StandTextures.makeFrontBanner(), 0, 2.34, -0.055, 0, frame); // banner
+  box(2.96, 0.07, 0.07, mat.wood, 0, 2.64, 0, 0, frame);              // top crossbar
+  plane(2.8, 0.62, StandTextures.makeFrontBanner(), 0, 2.34, -0.055, 0, frame); // banner
   frame.position.set(0, 0, 1.52);   // flush with the corner poles
   scene.add(frame);
 
