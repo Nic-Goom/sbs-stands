@@ -45,22 +45,22 @@ function buildStand(scene) {
   ground.receiveShadow = true;
   scene.add(ground);
 
-  /* ---------- marquee shell ---------- */
+  /* ---------- marquee shell (3 × 3 m pitch) ---------- */
   const H = 2.2;
-  plane(3.1, H + 0.15, null, 0, (H + 0.15) / 2, -1.52, 0, scene, { map: null, color: 0xf4f1ea });
+  plane(2.96, H + 0.15, null, 0, (H + 0.15) / 2, -1.5, 0, scene, { map: null, color: 0xf4f1ea });
   // use boxes for crisper walls
-  box(3.14, H + 0.1, 0.04, mat.canvasWhite, 0, (H + 0.1) / 2, -1.54, 0, scene, false);
-  box(0.04, H + 0.1, 3.1, mat.canvasWhite, -1.54, (H + 0.1) / 2, 0, 0, scene, false);
-  box(0.04, H + 0.1, 3.1, mat.canvasWhite, 1.54, (H + 0.1) / 2, 0, 0, scene, false);
+  box(2.96, H + 0.1, 0.04, mat.canvasWhite, 0, (H + 0.1) / 2, -1.5, 0, scene, false);
+  box(0.04, H + 0.1, 3.0, mat.canvasWhite, -1.47, (H + 0.1) / 2, 0, 0, scene, false);
+  box(0.04, H + 0.1, 3.0, mat.canvasWhite, 1.47, (H + 0.1) / 2, 0, 0, scene, false);
 
   // roof (toggleable)
-  const roof = new THREE.Mesh(new THREE.PlaneGeometry(3.3, 3.5), mat.canvasWhite);
+  const roof = new THREE.Mesh(new THREE.PlaneGeometry(3.0, 3.0), mat.canvasWhite);
   roof.position.set(0, 2.46, -0.05);
   roof.rotation.x = Math.PI / 2 - 0.18;
   refs.roofGroup.add(roof);
-  // corner poles
-  [-1.6, 1.6].forEach(px => {
-    box(0.06, 2.25, 0.06, mat.darkGrey, px, 1.12, 1.52, 0, scene);
+  // corner poles — outer edge at ±1.50, exactly 3 m span
+  [-1.47, 1.47].forEach(px => {
+    box(0.06, 2.25, 0.06, mat.darkGrey, px, 1.12, 1.5, 0, scene);
   });
   scene.add(refs.roofGroup);
 
@@ -164,7 +164,7 @@ function buildStand(scene) {
   };
 
   /* ---------- entry-gap corner posts (show frontage uprights) ---------- */
-  box(0.07, 0.42, 0.07, mat.wood, -1.51, 0.21, 1.5);
+  box(0.07, 0.42, 0.07, mat.wood, -1.47, 0.21, 1.5);
 
   /* ---------- 1. tall timber frame: main banner hoisted above the bunting ---------- */
   // free-standing goalpost frame at the front — nothing fixed to the tent, no barrier across the opening
@@ -174,7 +174,7 @@ function buildStand(scene) {
   });
   box(2.96, 0.07, 0.07, mat.wood, 0, 2.64, 0, 0, frame);              // top crossbar
   plane(2.8, 0.62, StandTextures.makeFrontBanner(), 0, 2.34, -0.055, 0, frame); // banner
-  frame.position.set(0, 0, 1.52);   // flush with the corner poles
+  frame.position.set(0, 0, 1.5);    // flush with the corner poles
   scene.add(frame);
 
   /* ---------- 2. tension-fabric media wall (printed) + LED spotlights ---------- */
@@ -232,10 +232,10 @@ function buildStand(scene) {
   refs.kiosk = kiosk;
 
   /* ---------- right side-wall backdrop (for traffic from the other direction) ---------- */
-  plane(2.9, 1.85, StandTextures.makeSideBackdrop(), 1.525, 1.0, -0.05, -Math.PI / 2, scene);
+  plane(2.9, 1.85, StandTextures.makeSideBackdrop(), 1.47, 1.0, -0.05, -Math.PI / 2, scene);
 
   /* ---------- left side-wall: white shimmery softening fabric ---------- */
-  plane(2.9, 1.95, StandTextures.makeShimmerFabric(), -1.515, 1.0, -0.05, Math.PI / 2, scene, { roughness: 0.42, metalness: 0.05 });
+  plane(2.9, 1.95, StandTextures.makeShimmerFabric(), -1.47, 1.0, -0.05, Math.PI / 2, scene, { roughness: 0.42, metalness: 0.05 });
 
   /* ---------- 8. staff area (screened by the media wall divider) ---------- */
   const fb = refs.falseBackGroup;   // kept for ref compatibility; media wall is the divider now
@@ -357,7 +357,7 @@ function buildStand(scene) {
     refs.labels.push(sprite);
     return sprite;
   }
-  label(1, 0, 2.62, 1.52);                     // hoisted front banner
+  label(1, 0, 2.62, 1.5);                      // hoisted front banner
   label(2, -1.05, 2.12, 0.12, refs.displayGroup); // media wall (moves with it)
   label(3, 0.62, 1.95, 0.42);                   // screen on cloth table
   label(4, -1.25, 2.15, 0.55);                 // two banners
