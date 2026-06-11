@@ -397,32 +397,31 @@ const StandTextures = (() => {
   /* ---------- A-frame pavement board ---------- */
   function makeAFrame() {
     const [c, x] = cv(800, 1100);
-    // purple background
     x.fillStyle = BRAND.purple; x.fillRect(0, 0, 800, 1100);
-    x.globalAlpha = 0.15; x.drawImage(IMG.dotsPurple, 420, 680, 420, 420); x.globalAlpha = 1;
-    // pink splash top-RIGHT so it doesn't touch the F
-    x.drawImage(IMG.splashPink, 520, -100, 360, 360);
+    x.globalAlpha = 0.15; x.drawImage(IMG.dotsPurple, 420, 700, 420, 420); x.globalAlpha = 1;
+    // pink splash top-right — clear of the F
+    x.drawImage(IMG.splashPink, 510, -110, 370, 370);
 
     // --- TOP SECTION: FREE GAME ---
-    veneer(x, 'FREE', 400, 180, 190, BRAND.lime);
-    veneer(x, 'GAME!', 400, 345, 190, BRAND.pink);
-    body(x, 'Play our Step Up Challenge', 400, 420, 32, BRAND.white, 'center', true);
+    veneer(x, 'FREE', 400, 155, 165, BRAND.lime);
+    veneer(x, 'GAME!', 400, 300, 165, BRAND.pink);
+    body(x, 'Play our Step Up Challenge', 400, 360, 30, BRAND.white, 'center', true);
 
-    // divider stroke
-    x.drawImage(IMG.strokeWhite, 60, 450, 680, 90);
+    // divider
+    x.drawImage(IMG.strokeWhite, 60, 390, 680, 90);
 
-    // --- BOTTOM SECTION: competition (independent of the game) ---
-    veneer(x, 'COMPETITION', 400, 555, 72, BRAND.lime);
-    veneer(x, 'WIN!', 400, 640, 100, BRAND.yellow);
-    body(x, 'A FREE family holiday', 400, 692, 32, BRAND.white, 'center', true);
-    veneer(x, 'ROCKLEY PARK', 400, 755, 62, BRAND.pink);
-    body(x, 'Poole, Dorset  •  See us for details', 400, 797, 26, BRAND.white, 'center', true);
+    // --- BOTTOM SECTION: competition ---
+    veneer(x, 'COMPETITION', 400, 510, 58, BRAND.lime);
+    veneer(x, 'WIN!', 400, 600, 105, BRAND.yellow);
+    body(x, 'A FREE family holiday', 400, 655, 33, BRAND.white, 'center', true);
+    veneer(x, 'ROCKLEY PARK', 400, 715, 66, BRAND.pink);
+    body(x, 'Poole, Dorset  •  See us for details', 400, 753, 24, BRAND.white, 'center', true);
 
-    // Rockley Park photo (optional — clipped to rounded rect)
+    // Rockley Park photo
     if (IMG.rockley) {
-      const iw = 560, ih = 160, ix = 120, iy = 820;
+      const iw = 580, ih = 200, ix = 110, iy = 778;
       x.save();
-      roundRect(x, ix, iy, iw, ih, 12); x.clip();
+      roundRect(x, ix, iy, iw, ih, 14); x.clip();
       const sc = Math.max(iw / IMG.rockley.width, ih / IMG.rockley.height);
       const dw = IMG.rockley.width * sc, dh = IMG.rockley.height * sc;
       x.drawImage(IMG.rockley, ix + (iw - dw) / 2, iy + (ih - dh) / 2, dw, dh);
@@ -430,7 +429,7 @@ const StandTextures = (() => {
     }
 
     // logo
-    x.drawImage(IMG.logoWhite, 310, 990, 180, 90);
+    x.drawImage(IMG.logoWhite, 320, 1000, 160, 80);
     return tex(c);
   }
 
