@@ -58,8 +58,6 @@ function buildStand(scene) {
   roof.position.set(0, 2.46, -0.05);
   roof.rotation.x = Math.PI / 2 - 0.18;
   refs.roofGroup.add(roof);
-  // green fascia across the front
-  box(3.3, 0.3, 0.05, mat.green, 0, 2.18, 1.55, 0, refs.roofGroup);
   // corner poles
   [-1.6, 1.6].forEach(px => {
     box(0.06, 2.25, 0.06, mat.darkGrey, px, 1.12, 1.52, 0, scene);
