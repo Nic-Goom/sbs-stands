@@ -91,7 +91,7 @@ function buildStand(scene) {
   // The marquee's cream tie-back curtains can't be removed; they gather at each
   // front corner. We can hang a brand drape (white or purple) in front to hide them.
   // Opening between corner posts ≈ 3.00 m (x: -1.50 … +1.50).
-  function pleatedCurtain(w, h, folds, depth, texture, x, y, z, parent, tieback = false) {
+  function pleatedCurtain(w, h, folds, depth, texture, x, y, z, parent, tieback = false, gatherSide = 0) {
     const segsX = Math.max(10, folds * 6);
     const segsY = tieback ? 28 : 1;
     const geo = new THREE.PlaneGeometry(w, h, segsX, segsY);
@@ -101,10 +101,10 @@ function buildStand(scene) {
       const py = pos.getY(i);
       pos.setZ(i, Math.sin((px / w + 0.5) * Math.PI * 2 * folds) * depth);
       if (tieback) {
-        // pinch x toward 0 at the tie point (mid-height), fan out at top and bottom
+        // gather toward gatherSide wall (+1 right, -1 left) at mid-height
         const t = (py + h / 2) / h;   // 0 = bottom, 1 = top
         const squeeze = 0.72 * Math.exp(-14 * Math.pow(t - 0.5, 2));
-        pos.setX(i, px * (1 - squeeze));
+        pos.setX(i, px + (gatherSide * w / 2 - px) * squeeze);
       }
     }
     geo.computeVertexNormals();
@@ -119,7 +119,7 @@ function buildStand(scene) {
   const creamTex = StandTextures.makeCurtainFabric('cream');
   [-1, 1].forEach(side => {
     const cx = side * 1.35;                       // centre 0.15 m in from the post → inner edge ∓1.20
-    pleatedCurtain(0.30, 1.98, 4, 0.05, creamTex, cx, 1.03, 1.42, scene, true);
+    pleatedCurtain(0.30, 1.98, 4, 0.05, creamTex, cx, 1.03, 1.42, scene, true, side);
     // tie-band pinching it at mid height
     box(0.34, 0.05, 0.12, mat.darkGrey, cx, 1.0, 1.45, 0, scene, false);
   });
@@ -130,7 +130,7 @@ function buildStand(scene) {
   const coverMeshes = [];
   [-1, 1].forEach(side => {
     const cx = side * 1.275;                      // inner edge ∓1.05
-    const d = pleatedCurtain(0.45, 2.02, 5, 0.05, coverTex.purple, cx, 1.04, 1.47, coverGroup, true);
+    const d = pleatedCurtain(0.45, 2.02, 5, 0.05, coverTex.purple, cx, 1.04, 1.47, coverGroup, true, side);
     coverMeshes.push(d);
     // curtain pole header
     box(0.49, 0.05, 0.06, mat.darkGrey, cx, 2.05, 1.47, 0, coverGroup, false);
@@ -331,7 +331,7 @@ function buildStand(scene) {
   });
   // throw line
   box(0.5, 0.005, 0.05, mat.pink, 0, 0.004, 0.5, 0, game, scene, false);
-  game.position.set(-0.85, 0, 2.35);   // spills out in FRONT of the tent to pull people in
+  game.position.set(-0.85, 0, 2.5);    // spills out in FRONT of the tent to pull people in
   game.rotation.y = 0.5;
   scene.add(game);
 
@@ -363,7 +363,7 @@ function buildStand(scene) {
   label(4, -1.25, 2.15, 0.55);                 // two banners
   label(5, 1.2, 1.5, 1.2);                     // desk
   label(6, 1.18, 1.78, 1.95);                  // leaflet column (out front)
-  label(7, -0.85, 1.0, 2.35);                  // game (out front)
+  label(7, -0.85, 1.0, 2.5);                   // game (out front)
   label(8, 0.05, 0.95, -1.05);                 // staff area
   label(9, 1.98, 1.05, 2.78);                  // A-frame
 
