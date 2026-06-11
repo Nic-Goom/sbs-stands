@@ -180,8 +180,8 @@ function buildStand(scene) {
   // back wall and the 2 m line; staff work behind it either way.
   const dg = refs.displayGroup;
   // wall is 2400 mm wide, sitting to the LEFT so there's a 600 mm access gap on the right
-  box(2.46, 1.96, 0.05, mat.darkGrey, -0.3, 1.15, -0.03, 0, dg, false);
-  plane(2.4, 1.9, StandTextures.makeMediaWall(), -0.3, 1.15, 0.005, 0, dg);
+  box(2.46, 1.96, 0.05, mat.darkGrey, -0.3, 0.98, -0.03, 0, dg, false);
+  plane(2.4, 1.9, StandTextures.makeMediaWall(), -0.3, 0.95, 0.005, 0, dg);
   // two LED spotlight arms across the top (give light in the tent + on brand)
   refs.spots = [];
   [-1.05, 0.45].forEach(lx => {
@@ -254,10 +254,10 @@ function buildStand(scene) {
   // closed camping shelving unit — 600w x 970h x 530d — in the back-LEFT corner, beyond the table
   box(0.6, 0.97, 0.53, mat.darkGrey, -1.16, 0.485, -1.18, 0, sp);
   plane(0.6, 0.97, StandTextures.makeShelfUnit(), -1.16, 0.485, -0.915, 0, sp);
-  // folding chair tucked in by the table
-  box(0.42, 0.04, 0.42, mat.darkGrey, 0.05, 0.45, -0.62, 0, sp);
-  box(0.42, 0.42, 0.04, mat.darkGrey, 0.05, 0.66, -0.81, 0, sp);
-  [[-0.14, -0.47], [-0.14, -0.77], [0.24, -0.47], [0.24, -0.77]].forEach(([lx, lz]) => {
+  // folding chair to the RIGHT side of the table, facing the table
+  box(0.42, 0.04, 0.42, mat.darkGrey, 0.66, 0.45, -1.05, 0, sp);           // seat
+  box(0.04, 0.42, 0.42, mat.darkGrey, 0.85, 0.66, -1.05, 0, sp);           // back (rotated 90°)
+  [[0.81, -0.86], [0.51, -0.86], [0.81, -1.24], [0.51, -1.24]].forEach(([lx, lz]) => {
     box(0.035, 0.45, 0.035, mat.darkGrey, lx, 0.22, lz, 0, sp);
   });
   scene.add(sp);
