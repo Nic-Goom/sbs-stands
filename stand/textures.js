@@ -396,16 +396,26 @@ const StandTextures = (() => {
   /* ---------- A-frame pavement board ---------- */
   function makeAFrame() {
     const [c, x] = cv(800, 1100);
-    x.fillStyle = BRAND.lime; x.fillRect(0, 0, 800, 1100);
-    x.globalAlpha = 0.9; x.drawImage(IMG.dotsPurple, 480, 760, 360, 360); x.globalAlpha = 1;
-    x.drawImage(IMG.splashPink, -120, -120, 420, 420);
-    veneer(x, 'COME SAY', 400, 230, 130, BRAND.purple);
-    veneer(x, 'HELLO!', 400, 370, 150, BRAND.pink);
-    x.drawImage(IMG.strokeWhite, 70, 470, 660, 150);
-    veneer(x, 'PLAY THE GAME', 400, 548, 76, BRAND.purple);
-    body(x, 'Win a sticker \u2022 meet the team', 400, 680, 36, BRAND.purple, 'center', true);
-    body(x, 'Find out how YOU can be the hero', 400, 730, 36, BRAND.purple, 'center', true);
-    x.drawImage(IMG.logoWhite, 310, 850, 180, 170);
+    // purple background
+    x.fillStyle = BRAND.purple; x.fillRect(0, 0, 800, 1100);
+    x.globalAlpha = 0.18; x.drawImage(IMG.dotsPurple, 440, 700, 400, 400); x.globalAlpha = 1;
+    // lime splash top-left
+    x.drawImage(IMG.splashLime, -80, -80, 380, 380);
+    // FREE GAME headline
+    veneer(x, 'FREE', 400, 190, 190, BRAND.lime);
+    veneer(x, 'GAME!', 400, 360, 190, BRAND.pink);
+    // pink stroke divider
+    x.drawImage(IMG.strokePink, 60, 430, 680, 120);
+    veneer(x, 'PLAY OUR STEP UP CHALLENGE', 400, 494, 48, BRAND.white);
+    // competition box
+    x.fillStyle = BRAND.lime;
+    roundRect(x, 60, 560, 680, 280, 18); x.fill();
+    veneer(x, 'WIN!', 400, 630, 100, BRAND.purple);
+    body(x, 'A FREE family stay at', 400, 700, 34, BRAND.purple, 'center', true);
+    veneer(x, 'ROCKLEY PARK', 400, 770, 68, BRAND.pink);
+    body(x, 'Poole, Dorset', 400, 820, 30, BRAND.purple, 'center', true);
+    // logo
+    x.drawImage(IMG.logoWhite, 310, 890, 180, 170);
     return tex(c);
   }
 
