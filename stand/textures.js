@@ -30,7 +30,9 @@ const StandTextures = (() => {
     bthLogo: 'assets/bth-logo.png',
     heroes: 'assets/heroes.png',
     cooking: 'assets/cooking.png',
-    mediaWall: 'assets/mediawall.png'
+    mediaWall: 'assets/mediawall.png',
+    banner1: 'assets/banner1.png',
+    banner2: 'assets/banner2.png'
   };
 
   function loadImage(src) {
@@ -42,7 +44,7 @@ const StandTextures = (() => {
     });
   }
 
-  const OPTIONAL_IMGS = new Set(['cooking', 'mediaWall']);
+  const OPTIONAL_IMGS = new Set(['cooking', 'mediaWall', 'banner1', 'banner2']);
 
   async function load() {
     const font = new FontFace('Veneer', "url('fonts/Veneer.otf')");
@@ -296,6 +298,10 @@ const StandTextures = (() => {
       body(x, 'stepbystep.org.uk', 256, 1180, 26, BRAND.white, 'center', true);
       out.push(tex(c));
     }
+    // Override drawn designs with flat artwork files when uploaded
+    function flatBanner(img) { const [c, x] = cv(img.width, img.height); x.drawImage(img, 0, 0); return tex(c); }
+    if (IMG.banner1) out[0] = flatBanner(IMG.banner1);
+    if (IMG.banner2) out[2] = flatBanner(IMG.banner2);
     return out;
   }
 
