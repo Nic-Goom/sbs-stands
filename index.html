@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>New Forest Show Stand — 3D Concept</title>
+<style>
+  @font-face {
+    font-family: 'Veneer';
+    src: url('fonts/Veneer.otf') format('opentype');
+  }
+  :root {
+    --purple: #412576;
+    --lime: #b3d12b;
+    --pink: #e60d8c;
+    --yellow: #f4e600;
+    --ink: #111111;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { height: 100%; overflow: hidden; }
+  body { font-family: Verdana, sans-serif; background: #cfdce4; }
+
+  #viewport { position: absolute; inset: 0; }
+  #viewport canvas { display: block; }
+
+  #loading {
+    position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+    font-family: 'Veneer', Impact, sans-serif; font-size: 28px; color: var(--purple);
+    letter-spacing: 1px; z-index: 5;
+  }
+
+  #panel {
+    position: absolute; top: 16px; left: 16px; z-index: 10;
+    width: 318px; max-height: calc(100% - 32px);
+    background: #ffffff; border-radius: 8px;
+    box-shadow: 0 6px 24px rgba(17, 17, 17, 0.18);
+    display: flex; flex-direction: column; overflow: hidden;
+  }
+  #panel-head {
+    background: var(--purple); color: #ffffff; padding: 14px 16px 12px;
+    display: flex; align-items: flex-start; gap: 10px;
+  }
+  #panel-head .stairs { display: flex; align-items: flex-end; gap: 2px; height: 26px; margin-top: 3px; }
+  #panel-head .stairs span { width: 7px; background: linear-gradient(180deg, var(--yellow), var(--lime)); display: block; }
+  #panel-head h1 { font-family: 'Veneer', Impact, sans-serif; font-size: 24px; line-height: 1.02; letter-spacing: 0.5px; font-weight: normal; }
+  #panel-head p { font-size: 10.5px; margin-top: 3px; color: var(--lime); }
+  #panel-collapse {
+    margin-left: auto; background: none; border: 1px solid rgba(255,255,255,0.45); color: #ffffff;
+    border-radius: 4px; width: 24px; height: 24px; cursor: pointer; font-size: 13px; line-height: 1; flex: none;
+  }
+  #panel-body { overflow-y: auto; padding: 12px 16px 16px; }
+  #panel.collapsed #panel-body { display: none; }
+
+  .sec { margin-bottom: 14px; }
+  .sec h2 {
+    font-family: 'Veneer', Impact, sans-serif; font-weight: normal; font-size: 15px;
+    color: var(--purple); letter-spacing: 1px; margin-bottom: 7px;
+  }
+  .btn-row { display: flex; flex-wrap: wrap; gap: 6px; }
+  .btn-row button {
+    font-family: Verdana, sans-serif; font-size: 11px; font-weight: bold;
+    padding: 7px 10px; border-radius: 4px; border: 1.5px solid var(--purple);
+    background: #ffffff; color: var(--purple); cursor: pointer;
+  }
+  .btn-row button:hover { background: #f3effa; }
+  .btn-row button.active { background: var(--purple); color: #ffffff; }
+
+  .toggles { display: flex; flex-direction: column; gap: 7px; }
+  .toggles label { display: flex; align-items: center; gap: 8px; font-size: 11.5px; color: var(--ink); cursor: pointer; }
+  .toggles input { accent-color: var(--pink); width: 15px; height: 15px; }
+
+  .readout { display: flex; align-items: baseline; gap: 7px; background: #f3effa; border-radius: 6px; padding: 8px 11px; }
+  .readout-val { font-family: 'Veneer', Impact, sans-serif; font-size: 26px; color: var(--purple); line-height: 1; }
+  .readout-lbl { font-size: 10.5px; color: #555555; }
+  .micro { font-size: 10px; color: #777777; line-height: 1.5; margin-top: 8px; }
+  .micro b { color: var(--purple); }
+
+  ol.legend { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  ol.legend li { display: flex; gap: 9px; font-size: 11px; line-height: 1.45; color: #333333; }
+  ol.legend li.dim { opacity: 0.38; }
+  ol.legend .num {
+    flex: none; width: 20px; height: 20px; border-radius: 50%;
+    background: var(--lime); color: var(--purple);
+    font-family: 'Veneer', Impact, sans-serif; font-size: 13px;
+    display: flex; align-items: center; justify-content: center; margin-top: 1px;
+  }
+  ol.legend b { color: var(--purple); }
+
+  .hint {
+    font-size: 10px; color: #777777; border-top: 1px solid #eeeeee;
+    padding-top: 9px; line-height: 1.5;
+  }
+  @media (max-width: 640px) {
+    #panel { width: calc(100% - 32px); max-height: 55%; }
+  }
+</style>
+</head>
+<body>
+
+<template id="__bundler_thumbnail">
+  <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <rect width="100" height="100" fill="#412576"/>
+    <rect x="30" y="46" width="40" height="30" fill="#ffffff"/>
+    <path d="M26 46 L50 30 L74 46 Z" fill="#1d7d5c"/>
+    <rect x="30" y="46" width="40" height="5" fill="#1d7d5c"/>
+    <g fill="#b3d12b">
+      <rect x="38" y="64" width="5" height="6"/>
+      <rect x="44" y="60" width="5" height="10"/>
+      <rect x="50" y="56" width="5" height="14"/>
+      <rect x="56" y="52" width="5" height="18"/>
+    </g>
+    <circle cx="50" cy="22" r="6" fill="#e60d8c"/>
+  </svg>
+</template>
+
+<div id="viewport"></div>
+<div id="loading">BUILDING YOUR STAND&hellip;</div>
+
+<div id="panel">
+  <div id="panel-head">
+    <div class="stairs"><span style="height: 25%;"></span><span style="height: 50%;"></span><span style="height: 75%;"></span><span style="height: 100%;"></span></div>
+    <div>
+      <h1>NEW FOREST SHOW &rsquo;26</h1>
+      <p>Step by Step &mdash; 3&times;3&thinsp;m stand concept</p>
+    </div>
+    <button id="panel-collapse" title="Collapse panel">&ndash;</button>
+  </div>
+  <div id="panel-body">
+    <div class="sec">
+      <h2>VIEWS</h2>
+      <div class="btn-row">
+        <button data-preset="visitor">Visitor</button>
+        <button data-preset="inside">On stand</button>
+        <button data-preset="staff">Staff area</button>
+        <button data-preset="plan">Plan</button>
+        <button data-preset="orbit">Orbit</button>
+      </div>
+    </div>
+    <div class="sec">
+      <h2>OPTIONS</h2>
+      <div class="toggles">
+        <label><input type="checkbox" id="toggle-falseback" checked> False back at 2&thinsp;m + hidden staff area</label>
+        <label><input type="checkbox" id="toggle-labels" checked> Numbered labels</label>
+        <label><input type="checkbox" id="toggle-roof" checked> Marquee roof &amp; fascia (auto-lifts when you look down)</label>
+      </div>
+    </div>
+    <div class="sec">
+      <h2>FRONT CURTAINS</h2>
+      <div class="btn-row" style="margin-bottom: 8px;">
+        <button data-curtain="off">Tie-backs only</button>
+        <button data-curtain="white">White drape</button>
+        <button data-curtain="purple">Purple drape</button>
+      </div>
+      <div class="readout">
+        <span class="readout-val" id="opening-readout">2.10&thinsp;m</span>
+        <span class="readout-lbl">clear opening &middot; <span id="opening-note">with purple cover drape</span></span>
+      </div>
+      <p class="micro">The cream tie-back curtains can&rsquo;t be removed. A brand drape hung in front hides them &mdash; it takes ~450&thinsp;mm off each side (vs ~300&thinsp;mm for the tie-backs alone), so the <b>3.0&thinsp;m</b> front narrows to about <b>2.1&thinsp;m</b>.</p>
+    </div>
+    <div class="sec">
+      <h2>WHAT&rsquo;S ON THE STAND</h2>
+      <ol class="legend">
+        <li id="legend-1"><span class="num">1</span><span><b>Hoisted main banner</b> &mdash; new print on a free-standing timber frame that holds it high, <i>above</i> the bunting. Nothing fixed to the tent, and the stand front stays open &mdash; no barrier.</span></li>
+        <li id="legend-2"><span class="num">2</span><span><b>Tension-fabric media wall</b> (2.4&thinsp;m wide) with built-in <b>LED spotlights</b>. Sits to the left, leaving a <b>600&thinsp;mm access gap</b> on the right to slip behind. Doubles as the divider.</span></li>
+        <li id="legend-3"><span class="num">3</span><span><b>Screen on a dressed table</b> &mdash; the Mobile Pixels sits on a 700&times;700&thinsp;mm table with a <b>floor-length brand tablecloth</b>; the printed cut-out surround wraps the screen with &ldquo;Take a Stand Against Youth Homelessness&rdquo; above. Lifts off each night.</span></li>
+        <li id="legend-4"><span class="num">4</span><span><b>Two pull-up banners</b> (850&thinsp;mm each) &mdash; &ldquo;Behind Every Hero&rdquo; + &ldquo;Be the Hero of Your Own Story&rdquo;, against a white shimmery fabric that softens the left wall.</span></li>
+        <li id="legend-5"><span class="num">5</span><span><b>Pop-up desk + donation bucket</b> &mdash; at the entry gap, angled to greet not block.</span></li>
+        <li id="legend-6"><span class="num">6</span><span><b>Single-column leaflet stand</b> &mdash; out at the front of the gazebo, just before the A-frame, to grab passers-by.</span></li>
+        <li id="legend-7"><span class="num">7</span><span><b>&ldquo;Step Up&rdquo; game</b> &mdash; pulled out <i>in front</i> of the tent to draw people in. Placeholder &mdash; swap for whatever game you land on.</span></li>
+        <li id="legend-8"><span class="num">8</span><span><b>False back + staff area</b> &mdash; the media wall sits on the 2&thinsp;m line; garden box behind it is your seat/desk and storage.</span></li>
+        <li id="legend-9"><span class="num">9</span><span><b>A-frame board</b> &mdash; out on the walkway to catch attention and point people in.</span></li>
+      </ol>
+    </div>
+    <div class="hint">Drag to orbit &bull; scroll to zoom &bull; right-drag to pan. Use the toggles to compare layouts &mdash; tell me what to move and I&rsquo;ll update the model.</div>
+  </div>
+</div>
+
+<script>
+  window.__errs = [];
+  window.addEventListener('error', function (e) {
+    window.__errs.push((e.message || '') + ' @ ' + (e.filename || '').split('/').pop() + ':' + e.lineno);
+  });
+  window.addEventListener('unhandledrejection', function (e) {
+    window.__errs.push('rejection: ' + (e.reason && e.reason.stack ? e.reason.stack.slice(0, 300) : String(e.reason)));
+  });
+</script>
+<script src="https://unpkg.com/three@0.137.0/build/three.min.js"></script>
+<script src="https://unpkg.com/three@0.137.0/examples/js/controls/OrbitControls.js"></script>
+<script src="stand/textures.js"></script>
+<script src="stand/scene.js"></script>
+<script src="stand/main.js"></script>
+
+</body>
+</html>
