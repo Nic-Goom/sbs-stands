@@ -28,7 +28,8 @@ const StandTextures = (() => {
     logoWhite: 'assets/logo-primary-white.png',
     logoWideWhite: 'assets/logo-secondary-white.png',
     bthLogo: 'assets/bth-logo.png',
-    heroes: 'assets/heroes.png'
+    heroes: 'assets/heroes.png',
+    cooking: 'assets/cooking.png'
   };
 
   function loadImage(src) {
@@ -40,14 +41,19 @@ const StandTextures = (() => {
     });
   }
 
+  const OPTIONAL_IMGS = new Set(['cooking']);
+
   async function load() {
     const font = new FontFace('Veneer', "url('fonts/Veneer.otf')");
     const loaded = await Promise.all([
       font.load(),
-      ...Object.entries(IMG_SRC).map(async ([k, src]) => [k, await loadImage(src)])
+      ...Object.entries(IMG_SRC).map(async ([k, src]) => {
+        if (OPTIONAL_IMGS.has(k)) return [k, await loadImage(src).catch(() => null)];
+        return [k, await loadImage(src)];
+      })
     ]);
     document.fonts.add(loaded[0]);
-    loaded.slice(1).forEach(([k, im]) => { IMG[k] = im; });
+    loaded.slice(1).forEach(([k, im]) => { if (im) IMG[k] = im; });
   }
 
   function cv(w, h) {
@@ -295,51 +301,52 @@ const StandTextures = (() => {
   /* ---------- Tension-fabric media wall — "Open Your Home" fostering design ---------- */
   function makeMediaWall() {
     const [c, x] = cv(2000, 1250);
-    // White background
-    x.fillStyle = '#ffffff'; x.fillRect(0, 0, 2000, 1250);
 
-    // RIGHT 60%: heroes photo fills full height
-    const split = 800;
-    x.save();
-    x.beginPath(); x.rect(split, 0, 2000 - split, 1250); x.clip();
-    const pw = 2000 - split;
-    const sc = Math.max(pw / IMG.heroes.width, 1250 / IMG.heroes.height);
-    const dw = IMG.heroes.width * sc, dh = IMG.heroes.height * sc;
-    x.drawImage(IMG.heroes, split + (pw - dw) / 2, (1250 - dh) / 2, dw, dh);
-    x.restore();
-    // soft feather where left panel meets photo
-    const fade = x.createLinearGradient(split, 0, split + 120, 0);
-    fade.addColorStop(0, '#ffffff'); fade.addColorStop(1, 'rgba(255,255,255,0)');
-    x.fillStyle = fade; x.fillRect(split, 0, 120, 1250);
+    // Hot pink / magenta base (matches the reference poster)
+    x.fillStyle = BRAND.pink; x.fillRect(0, 0, 2000, 1250);
 
-    // Lime accent bars top + bottom
-    x.fillStyle = BRAND.lime; x.fillRect(0, 0, 2000, 16);
-    x.fillStyle = BRAND.lime; x.fillRect(0, 1234, 2000, 16);
+    // Large purple blob — right-centre, creates the purple coverage in the reference
+    x.globalAlpha = 0.88; x.drawImage(IMG.splashPurple, 560, -300, 1700, 1700);
+    // Second purple blob — lower left
+    x.globalAlpha = 0.65; x.drawImage(IMG.splashPurple, -280, 530, 1150, 1150);
+    x.globalAlpha = 1;
 
-    // LEFT: text panel (0–800 px)
-    staircase(x, 60, 90, 150, 120, BRAND.lime, BRAND.yellow);
+    // Lime / yellow accent splashes, lower left (like the reference)
+    x.globalAlpha = 0.75;
+    x.drawImage(IMG.splashYellow, 50, 920, 440, 440);
+    x.drawImage(IMG.splashLime, 0, 1060, 350, 350);
+    x.globalAlpha = 1;
 
-    veneer(x, 'OPEN YOUR HOME', 445, 248, 116, BRAND.purple);
-    veneer(x, 'TO A', 225, 370, 116, BRAND.pink);
-    x.fillStyle = BRAND.yellow; x.fillRect(50, 415, 840, 100);
-    veneer(x, 'YOUNG PERSON', 480, 468, 108, BRAND.purple);
+    // Large halftone dots — right side
+    x.globalAlpha = 0.55;
+    x.drawImage(IMG.dotsPurple, 1280, 360, 760, 760);
+    x.drawImage(IMG.dotsYellow, 1680, 800, 420, 420);
+    x.globalAlpha = 1;
 
-    [['SUPPORTED LODGINGS', 510], ['FOSTERING', 290]].forEach(([t, w], i) => {
-      const ty = 578 + i * 72;
-      x.fillStyle = BRAND.purple; roundRect(x, 50, ty, w, 52, 26); x.fill();
-      body(x, t, 50 + w / 2, ty + 29, 26, BRAND.white, 'center', true);
-    });
+    // Step by Step logo — top right corner
+    const logoW = 270 * (IMG.logoWhite.width / IMG.logoWhite.height);
+    x.drawImage(IMG.logoWhite, 2000 - logoW - 28, 26, logoW, 270);
 
-    body(x, 'Could you open your home and make a real', 440, 790, 30, BRAND.purple, 'center', true);
-    body(x, "difference in a young person's life?", 440, 828, 30, BRAND.purple, 'center', true);
+    // Main headline — large white Veneer, left-aligned
+    veneer(x, 'OPEN YOUR HOME', 62, 136, 164, BRAND.white, 'left');
+    veneer(x, 'TO A YOUNG PERSON', 62, 302, 164, BRAND.white, 'left');
 
-    x.fillStyle = BRAND.purple; roundRect(x, 50, 892, 830, 72, 12); x.fill();
-    body(x, "INTERESTED? COME AND TALK TO US TODAY", 465, 930, 26, BRAND.white, 'center', true);
+    // Service tags
+    body(x, 'SUPPORTED LODGINGS  |  FOSTERING', 62, 390, 40, BRAND.white, 'left', true);
 
-    // Footer band with logo
-    x.fillStyle = BRAND.purple; x.fillRect(0, 1038, split, 212);
-    x.drawImage(IMG.logoWideWhite, 52, 1058, 360, 360 * (IMG.logoWideWhite.height / IMG.logoWideWhite.width));
-    body(x, 'stepbystep.org.uk  //  01252 346100', 440, 1200, 24, BRAND.white, 'center', true);
+    // White paint stroke background for SPARE ROOM? (matches reference)
+    x.drawImage(IMG.strokeWhite, -30, 406, 1020, 178);
+    veneer(x, 'SPARE ROOM?', 66, 496, 88, BRAND.purple, 'left');
+
+    // CTA line — pink on purple area (clearly visible)
+    body(x, "YOU CAN MAKE A DIFFERENCE IN A YOUNG PERSON'S LIFE", 62, 608, 36, BRAND.pink, 'left', true);
+
+    // Photo — bottom area; uses cooking.png when available, falls back to heroes.png
+    const photoImg = IMG.cooking || IMG.heroes;
+    const ph = 820;
+    const pw = ph * (photoImg.width / photoImg.height);
+    // Position: centred around x=1100, sitting on the bottom edge
+    x.drawImage(photoImg, Math.max(600, 1100 - pw / 2), 1250 - ph, pw, ph);
 
     return tex(c);
   }
